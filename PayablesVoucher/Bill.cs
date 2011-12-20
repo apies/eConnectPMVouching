@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
+using System.IO;
+using CsvHelper;
 
 namespace PayablesVoucher
 {
@@ -28,10 +30,41 @@ namespace PayablesVoucher
         }
 
 
-        //public string DeptLookUp(string employeeid)
-       // {
+        public IEnumerable<LineItem> CsvBillParse(string path)
+        {
+            var sr = new StreamReader(path);
+            var csvReader = new CsvReader(sr);
 
-      //  }
+            while (csvReader.Read())
+            {
+
+                if (csvReader.GetField("User_ID") != "")
+                {
+                    LineItem lineItem = new LineItem();
+                    lineItem.Amount = Convert.ToDecimal(csvReader.GetField("Total_Current_Chgs"));
+                    lineItem.Description = csvReader.GetField("User_Name") + csvReader.GetField("Wireless_Number");
+                    lineItem.Distribution = CodeLookup(csvReader.GetField("User_ID"));
+                    yield return lineItem;
+                }
+
+            }
+            
+        }
+
+
+        public string CodeLookup(string employeeid)
+        {
+            Employee employee = new Employee();
+            XElement xEmployee = employee.GPQue(employeeid);
+            employee = employee.MakeOneModel(xEmployee);
+            string employeeDept = employee.Department;
+            Dictionary<string, string> deptDictionary = employee.DeptCode("7700", "6700");
+            string deptCode = deptDictionary[employeeDept];
+
+            return deptCode;
+
+        }
+
 
     }
 }
