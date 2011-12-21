@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.Dynamics.GP.eConnect;
 
 namespace PayablesVoucher
 {
@@ -212,8 +213,6 @@ namespace PayablesVoucher
         public XElement GPQue()
         {
 
-            try
-            {
                 string pasheet;
 
                 var xpasheet = new XElement("eConnect",
@@ -249,23 +248,14 @@ namespace PayablesVoucher
                 XElement blob = XElement.Parse(reqDoc);
                 return blob;
             }
-            catch (Exception ex) 
-            {
-                var xpasheet = new XElement("eConnect",
-                    new XElement("Employee",
-                        
-                          new XElement("DEPRTMNT", ex),
-                          new XElement("EMPLOYID", ex)));
-
-                return xpasheet;
-            }
+        
 
         }
 
         ///////
         //// GPQueOverLoad to Just get One Employee
 
-         public XElement GPQue(string employeeID)
+        public XElement GPQue(string employeeID)
         {
 
         
