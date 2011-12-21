@@ -38,12 +38,13 @@ namespace PayablesVoucher
             while (csvReader.Read())
             {
 
-                if (csvReader.GetField("User_ID") != "")
+                if (csvReader.GetField("User_ID") != null && csvReader.GetField("User_ID") != "")
                 {
                     LineItem lineItem = new LineItem();
-                    lineItem.Amount = Convert.ToDecimal(csvReader.GetField("Total_Current_Chgs"));
-                    lineItem.Description = csvReader.GetField("User_Name") + csvReader.GetField("Wireless_Number");
-                    lineItem.Distribution = CodeLookup(csvReader.GetField("User_ID"));
+                    lineItem.Amount = Convert.ToDecimal(csvReader.GetField("Total_Current_Chgs").Substring(1));
+                    lineItem.Description = csvReader.GetField("User_Name") + csvReader.GetField("Wireless Number");
+                    //lineItem.Distribution = CodeLookup(csvReader.GetField("User_ID"));
+                    lineItem.Distribution = csvReader.GetField("Cost_Center");
                     yield return lineItem;
                 }
 

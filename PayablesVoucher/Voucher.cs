@@ -11,7 +11,7 @@ namespace PayablesVoucher
     class Voucher
     {
 
-        public XElement MakeXmlVoucher(IEnumerable<LineItem> lineItems)
+        public XElement MakeXmlVoucher(IEnumerable<LineItem> lineItems,string batchnum, string vouchnum)
         {
 
 
@@ -26,21 +26,29 @@ namespace PayablesVoucher
             var xPayable = new XElement("eConnect",
                new XElement("PMTransactionType",
                  new XElement("taPMTransactionInsert",
-                   new XElement("BACHNUMB", "ALP 11/10/2011"),
-                   new XElement("VCHNUMWK", "ALAN PIES AMEX 11/11/2011"),
+                   new XElement("BACHNUMB", batchnum),
+                   new XElement("VCHNUMWK", vouchnum),
                    new XElement("VENDORID", "AME102"),
-                   new XElement("DOCNUMBR", "ALAN PIES AMEX 11/11/2011"),
+                   new XElement("DOCNUMBR", vouchnum),
                    new XElement("DOCTYPE", "1"),
                    new XElement("DOCAMNT", totalAmount),
                    new XElement("CHRGAMNT", totalAmount),
                    new XElement("DOCDATE", "10/17/2011"),
                    new XElement("PRCHAMNT", totalAmount),
                    new XElement("CREATEDIST", "0")),
-                   new XElement("taPMDistribution_Items",
+                 new XElement("taPMDistribution_Items",
+                   new XElement("taPMDistribution",
+                   new XElement("DOCTYPE", "1"),
+                   new XElement("VCHRNMBR", vouchnum),
+                   new XElement("VENDORID", "AME102"),
+                   new XElement("DEBITAMT", "0"),
+                   new XElement("DistRef", ""),
+                   new XElement("CRDTAMT", totalAmount),
+                   new XElement("ACTNUMST", "25-2010-10-000-01")),
                  from lineItem in lineItems
                  select new XElement("taPMDistribution",
                    new XElement("DOCTYPE", "1"),
-                   new XElement("VCHRNMBR", "ALAN PIES AMEX 11/11/2011"),
+                   new XElement("VCHRNMBR", vouchnum),
                    new XElement("VENDORID", "AME102"),
                    new XElement("DEBITAMT", lineItem.Amount),
                    new XElement("DistRef", lineItem.Description),
