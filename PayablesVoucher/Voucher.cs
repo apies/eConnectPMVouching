@@ -43,6 +43,7 @@ namespace PayablesVoucher
                    new XElement("VENDORID", "AME102"),
                    new XElement("DEBITAMT", "0"),
                    new XElement("DistRef", ""),
+                   new XElement("DISTTYPE", "2"),
                    new XElement("CRDTAMT", totalAmount),
                    new XElement("ACTNUMST", "25-2010-10-000-01")),
                  from lineItem in lineItems
@@ -53,6 +54,7 @@ namespace PayablesVoucher
                    new XElement("DEBITAMT", lineItem.Amount),
                    new XElement("DistRef", lineItem.Description),
                    new XElement("CRDTAMT", "0"),
+                   new XElement("DISTTYPE", "6"),
                    new XElement("ACTNUMST", lineItem.Distribution)))));
             return xPayable;
 
@@ -67,15 +69,15 @@ namespace PayablesVoucher
             string payableVoucher = payablex.ToString();
 
             // Specify the Microsoft Dynamics GP server and database in the connection string
-            string sConnectionString = @"data source=sc-gpd;initial catalog=tmi;integrated security=SSPI;persist security info=False;packet size=4096";
+            string sConnectionString = @"data source=sc-gpd;initial catalog=TMI;integrated security=SSPI;persist security info=False;packet size=4096";
 
             // Create an XML Document object for the schema
             XmlDocument XsdDoc = new XmlDocument();
 
             // Default path to the eConnect.xsd file
             // Change the filepath if the eConnect 10.0.0.0 SDK is installed in a location other than the default.
-            XsdDoc.Load(@"\Program files\Common Files\Microsoft Shared\eConnect 10\XML Sample Documents\Incoming XSD Schemas\eConnect.xsd");
-
+            XsdDoc.Load(@"C:\Program Files (x86)\Common Files\Microsoft Shared\eConnect 10\XML Sample Documents\Incoming XSD Schemas\eConnect.xsd");
+           
             // Create a string representing the eConnect schema
             string sXsdSchema = XsdDoc.OuterXml;
 

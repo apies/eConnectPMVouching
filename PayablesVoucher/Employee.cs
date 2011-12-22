@@ -103,7 +103,7 @@ namespace PayablesVoucher
             deptDictionary.Add("SALEEN", "25-" + internalcode + "-20-234-01");
             deptDictionary.Add("TSGMGS", "25-" + externalcode + "-60-600-01");
             deptDictionary.Add("CNTRNY", "25-" + externalcode + "-20-500-02");
-            deptDictionary.Add("SMID", "25-" + internalcode + "-20-235-06");
+            deptDictionary.Add("SMID", "25-" + internalcode + "-30-235-06");
             deptDictionary.Add("SMP&A", "25-" + internalcode + "-80-235-01");
             deptDictionary.Add("INPRMG", "25-" + internalcode + "-30-295-06");
             deptDictionary.Add("AMWC", "25-" + internalcode + "-20-210-99");
@@ -171,37 +171,46 @@ namespace PayablesVoucher
 
         public Employee MakeOneModel(XElement blob)
         {
-            XElement blob2 = blob.Element("eConnect").Element("Employee");
-            Employee e = new Employee();
-            Func<string, string> middleinitialize = s =>
+            try
             {
-                if (blob2.Element("MIDLNAME").Value == "")
+                XElement blob2 = blob.Element("eConnect").Element("Employee");
+                Employee e = new Employee();
+                Func<string, string> middleinitialize = s =>
                 {
-                    s = "";
-                    return s;
-                }
-                else
-                {
-                    s = blob2.Element("MIDLNAME").Value.Substring(0, 1) + ".";
-                    return s;
-                }
-            };
+                    if (blob2.Element("MIDLNAME").Value == "")
+                    {
+                        s = "";
+                        return s;
+                    }
+                    else
+                    {
+                        s = blob2.Element("MIDLNAME").Value.Substring(0, 1) + ".";
+                        return s;
+                    }
+                };
 
 
-            e.Department = blob2.Element("DEPRTMNT").Value;
-            e.EmployeeID = blob2.Element("EMPLOYID").Value;
-            e.FirstName = blob2.Element("FRSTNAME").Value;
-            e.LastName = blob2.Element("LASTNAME").Value;
+                e.Department = blob2.Element("DEPRTMNT").Value;
+                e.EmployeeID = blob2.Element("EMPLOYID").Value;
+                e.FirstName = blob2.Element("FRSTNAME").Value;
+                e.LastName = blob2.Element("LASTNAME").Value;
 
-            e.MiddleInitial = middleinitialize(blob2.Element("MIDLNAME").Value);
-            e.LastFirstMIName = blob2.Element("LASTNAME").Value + ", " +
-                          blob2.Element("FRSTNAME").Value + " " +
-                            middleinitialize(blob2.Element("MIDLNAME").Value);
-            e.TaosCell = blob2.Element("Address").Element("PHONE3").Value;
+                e.MiddleInitial = middleinitialize(blob2.Element("MIDLNAME").Value);
+                e.LastFirstMIName = blob2.Element("LASTNAME").Value + ", " +
+                              blob2.Element("FRSTNAME").Value + " " +
+                                middleinitialize(blob2.Element("MIDLNAME").Value);
+                e.TaosCell = blob2.Element("Address").Element("PHONE3").Value;
 
 
-            e.SalesForceID = blob2.Element("USERDEF2").Value;
-            return e;
+                e.SalesForceID = blob2.Element("USERDEF2").Value;
+                return e;
+            }
+            catch
+            {
+                Employee e = new Employee();
+                e.Department = "ACCT";
+                return e;
+            }
 
 
 
@@ -233,7 +242,7 @@ namespace PayablesVoucher
 
             // Create a connection string to specify the Microsoft Dynamics GP server and database
             // Change the data source and initial catalog to specify your server and database
-            string sConnectionString = @"data source=VM-GPD01;initial catalog=TMI;integrated security=SSPI;persist security info=False;packet size=4096";
+            string sConnectionString = @"data source=sc-gpd;initial catalog=TMI;integrated security=SSPI;persist security info=False;packet size=4096";
 
             // Create an eConnectMethods object
             eConnectMethods requester = new eConnectMethods();
@@ -280,7 +289,7 @@ namespace PayablesVoucher
 
             // Create a connection string to specify the Microsoft Dynamics GP server and database
             // Change the data source and initial catalog to specify your server and database
-            string sConnectionString = @"data source=VM-GPD01;initial catalog=TMI;integrated security=SSPI;persist security info=False;packet size=4096";
+            string sConnectionString = @"data source=sc-gpd;initial catalog=TMI;integrated security=SSPI;persist security info=False;packet size=4096";
 
             // Create an eConnectMethods object
             eConnectMethods requester = new eConnectMethods();

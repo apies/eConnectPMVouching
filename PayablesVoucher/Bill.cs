@@ -43,8 +43,8 @@ namespace PayablesVoucher
                     LineItem lineItem = new LineItem();
                     lineItem.Amount = Convert.ToDecimal(csvReader.GetField("Total_Current_Chgs").Substring(1));
                     lineItem.Description = csvReader.GetField("User_Name") + csvReader.GetField("Wireless Number");
-                    //lineItem.Distribution = CodeLookup(csvReader.GetField("User_ID"));
-                    lineItem.Distribution = csvReader.GetField("Cost_Center");
+                    lineItem.Distribution = CodeLookup(csvReader.GetField("User_ID"));
+                    //lineItem.Distribution = csvReader.GetField("Cost_Center");
                     yield return lineItem;
                 }
 
@@ -57,6 +57,8 @@ namespace PayablesVoucher
         {
             Employee employee = new Employee();
             XElement xEmployee = employee.GPQue(employeeid);
+
+            //here is where its breaking
             employee = employee.MakeOneModel(xEmployee);
             string employeeDept = employee.Department;
             Dictionary<string, string> deptDictionary = employee.DeptCode("7700", "6700");

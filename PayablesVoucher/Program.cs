@@ -12,7 +12,7 @@ namespace PayablesVoucher
         static void Main(string[] args)
         {
             Bill vBill = new Bill();
-            IEnumerable<LineItem> lineItems = vBill.CsvBillParse(@"c:\dump\vBill.csv");
+            IEnumerable<LineItem> lineItems = vBill.CsvBillParse(@"c:\gptools\vBillComplete.csv");
             /*foreach (LineItem lineItem in lineItems)
             {
                 
@@ -26,7 +26,8 @@ namespace PayablesVoucher
             
             Voucher pmVoucher = new Voucher();
             XElement xVoucher = pmVoucher.MakeXmlVoucher(lineItems, "Verizon" + nowDate, "Verizon" + nowDate);
-            xVoucher.Save(@"c:\dump\Voucher.xml");
+            //xVoucher.Save(@"c:\gptools\Voucher.xml");
+            pmVoucher.PushtoGP(xVoucher);
 
             Console.WriteLine(xVoucher.ToString());
 
